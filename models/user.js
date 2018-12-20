@@ -8,8 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     nonce: {
     	allowNull: false,
-    	type: DataTypes.INTEGER,
-    	defaultValue: () => Math.floor(Math.random() * 1000000)
+    	type: DataTypes.STRING
     }
   }, {
   	freezeTableName: true

@@ -16,10 +16,28 @@ $(document).ready(function(){
     });
     $("#loginBtn").click(function(){
         // code snippet to get nonce and then sign that and get jwt to be added
-        web3.personal.sign(web3.fromUtf8("Hello"), web3.eth.coinbase, (err, signature) => {
-          if (err) console.log(err);
-          else alert(signature);
           
-        });
+        // });
+        $.ajax({
+                url: '/getChallenge',
+                method: 'POST',
+                data: JSON.stringify({
+                    publicAddress: web3.eth.coinbase
+                }),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (data, status) {
+                    // alert(status);
+                    //console.log(data.nonce);
+                    web3.personal.sign(data.nonce, web3.eth.coinbase, (err, signature) => {
+                        if (err) console.log(err);
+                        else alert(signature);
+                          
+                    });
+                    
+                }
+
+            });
+
     });
 });
