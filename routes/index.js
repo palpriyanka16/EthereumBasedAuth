@@ -67,6 +67,7 @@ router.post('/auth', function(req, res, next) {
                 var token = jwt.sign(payload, secretString, {
                     expiresIn: 86400  
                 });
+                console.log(token);
                 res.status(200).send(JSON.stringify({msg: "Verified as true", token: token}));
             });
             
@@ -74,6 +75,16 @@ router.post('/auth', function(req, res, next) {
             console.log("false");
             res.status(501).send(JSON.stringify({msg: "Invalid signature"}));
         }
+    });
+});
+
+router.get('/restrictedAccess', function(req, res, next) {
+    var token = req.headers['x-access-token'];
+    if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+  
+    jwt.verify(token, secretString, function(err, decoded) {
+        if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+        res.status(200).send(decoded);
     });
 });
 
