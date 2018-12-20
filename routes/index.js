@@ -3,6 +3,8 @@ var router = express.Router();
 var path = require('path');
 var randomstring = require('randomstring');
 var ethUtil = require('ethereumjs-util');
+var jwt = require('jsonwebtoken');
+var secretString = "nerHhpVNs2CA";
 var models  = require(path.join(__dirname, '/../' ,'models'));
 var User = models.User;
 
@@ -59,7 +61,13 @@ router.post('/auth', function(req, res, next) {
                 where: { pubAddr: pubAddr}
             }).then(function(){
                 console.log("Nonce updated");
-                res.status(200).send(JSON.stringify({msg: "Verified as true"}));
+                const payload = {
+                    user: user.pubAddr    
+                };
+                var token = jwt.sign(payload, secretString, {
+                    expiresIn: 86400  
+                });
+                res.status(200).send(JSON.stringify({msg: "Verified as true", token: token}));
             });
             
         } else {

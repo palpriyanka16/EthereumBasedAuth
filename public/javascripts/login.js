@@ -57,7 +57,7 @@ function authenticate(signature) {
         contentType: 'application/json',
         dataType: 'json',
         success: function (data, status) {
-            alert("Signature verified");
+            alert("Signature verified" + " " + data.token);
         },
         error: function (status, error) {
            alert("Invalid signature");
