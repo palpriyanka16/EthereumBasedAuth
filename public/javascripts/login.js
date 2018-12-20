@@ -15,8 +15,7 @@ $(document).ready(function(){
             });
     });
     $("#loginBtn").click(function(){
-        // here first the code snippet to get the nonce and then sign and get jwt has to be incorporated
-        // for now i have just tried signing a random message only to see if metamask works properly
+        // code snippet to get nonce and then sign that and get jwt to be added
         web3.personal.sign(web3.fromUtf8("Hello"), web3.eth.coinbase, (err, signature) => {
           if (err) console.log(err);
           else alert(signature);
