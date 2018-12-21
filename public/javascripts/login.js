@@ -57,11 +57,32 @@ function authenticate(signature) {
         contentType: 'application/json',
         dataType: 'json',
         success: function (data, status) {
-            alert("Signature verified" + " " + data.token);
+            //alert("Signature verified" + " " + data.token);
+            localStorage.setItem('token', data.token);
+            getDashboard();
         },
         error: function (status, error) {
            alert("Invalid signature");
         }
 
     });
+}
+
+function getDashboard() {
+    $.ajax({
+        url: '/restrictedAccess',
+        method: 'GET',
+        headers: {"x-access-token": localStorage.getItem('token')},
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function (data, status) {
+            //alert(data.msg);
+            window.location.href = "/displayDashboard";
+        },
+        error: function(status, error) {
+            alert("Some error happened");
+        }
+
+    });
+
 }

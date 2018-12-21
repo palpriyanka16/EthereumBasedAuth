@@ -7,9 +7,11 @@ var jwt = require('jsonwebtoken');
 var secretString = "nerHhpVNs2CA";
 var models  = require(path.join(__dirname, '/../' ,'models'));
 var User = models.User;
+var loggedIn = false;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  if(loggedIn) res.render('dashboard');
   res.render('index', { title: 'Ethereum Login' });
 });
 
@@ -24,7 +26,9 @@ router.post('/signUp', function(req, res, next) {
 });
 
 router.post('/getChallenge', function(req, res, next) {
+    loggedIn = false;
     var pubAddr = req.body.publicAddress;
+    console.log(pubAddr);
     User.find({where: {pubAddr: pubAddr}}).then(function(user) {
         res.status(200).send(JSON.stringify({nonce: user.nonce}));
     }).catch(function(err) {
@@ -33,6 +37,7 @@ router.post('/getChallenge', function(req, res, next) {
 });
 
 router.post('/auth', function(req, res, next) {
+    loggedIn = false;
     var pubAddr = req.body.publicAddress;
     var signature = req.body.signature;
     User.findOne({where: {pubAddr: pubAddr}}).then(function(user) {
@@ -67,7 +72,7 @@ router.post('/auth', function(req, res, next) {
                 var token = jwt.sign(payload, secretString, {
                     expiresIn: 86400  
                 });
-                console.log(token);
+                //console.log(token);
                 res.status(200).send(JSON.stringify({msg: "Verified as true", token: token}));
             });
             
@@ -80,12 +85,30 @@ router.post('/auth', function(req, res, next) {
 
 router.get('/restrictedAccess', function(req, res, next) {
     var token = req.headers['x-access-token'];
-    if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
-  
+    if (!token) {
+       loggedIn = false;
+       return res.status(401).send({ auth: false, message: 'No token provided.' }); 
+    } 
+    console.log(token);
     jwt.verify(token, secretString, function(err, decoded) {
-        if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
-        res.status(200).send(decoded);
+        if (err){
+           loggedIn = false;
+           return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' }); 
+        } 
+        console.log("Verified");
+        loggedIn = true;
+        res.status(200).send(JSON.stringify({msg : "Holla you are logged in"}));
     });
 });
 
+router.get('/displayDashboard', function(req, res, next) {
+    if(loggedIn)
+        res.render('dashboard');
+    else res.render('error', {message: 'You need to login to access'});
+});
+
+router.post('/logout', function(req, res, next) {
+    loggedIn = false;
+    res.render('index', {title: 'Ethereum Login'});
+});
 module.exports = router;
