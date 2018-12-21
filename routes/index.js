@@ -7,6 +7,8 @@ var jwt = require('jsonwebtoken');
 var secretString = "nerHhpVNs2CA";
 var models  = require(path.join(__dirname, '/../' ,'models'));
 var User = models.User;
+var passwordHash = require('password-hash');
+
 var loggedIn = false;
 
 /* GET home page. */
@@ -16,14 +18,33 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/signUp', function(req, res, next) {
-    var nonce = randomstring.generate(12);
-    var user = { pubAddr: req.body.publicAddress, nonce: nonce};
+    var user = {
+        username: req.body.username,
+    }
+
+    if (req.body.isMetamaskSignUp) {
+        user['pubAddr'] = req.body.publicAddress;
+        user['nonce'] = randomstring.generate(12);
+    } else {
+        user['hashedPassword'] = passwordHash.generate(req.body.password);
+    }
+
     User.sync({force: false}).then(function(){
-        User.create(user);
-        console.log("User entered into db");
-        res.status(200).send(JSON.stringify({msg: "You have been signed up"}));
+        User.create(user)
+        .then(user => {
+            console.log(user.username + " entered into db");
+            res.status(200).send(JSON.stringify({msg: "You have been signed up"}));
+        })
+        .catch(err => {
+            if (err.name === 'SequelizeUniqueConstraintError') {
+                res.status(500).send('username or metamask publicAddress already exists.');
+            } else {
+                res.status(500).send('Internal server error.');
+            }
+        });
     }).catch(function(err) {
-        res.status(500).send(JSON.stringify({msg: err}));
+        console.log(err);
+        res.status(500).send('Internal server error.');
     });
 });
 
