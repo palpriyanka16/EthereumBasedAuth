@@ -14,7 +14,7 @@ var loggedIn = false;
 /* GET home page. */
 router.get('/', function(req, res, next) {
   if(loggedIn) res.render('dashboard');
-  res.render('index', { title: 'Ethereum Login' });
+  res.render('index', { title: 'Ethereum Based Login' });
 });
 
 router.post('/signUp', function(req, res, next) {
@@ -132,6 +132,6 @@ router.get('/displayDashboard', function(req, res, next) {
 
 router.post('/logout', function(req, res, next) {
     loggedIn = false;
-    res.render('index', {title: 'Ethereum Login'});
+    res.render('index', {title: 'Ethereum Based Login'});
 });
 module.exports = router;
