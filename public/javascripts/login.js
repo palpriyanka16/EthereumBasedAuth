@@ -16,14 +16,12 @@ $(document).ready(function(){
     });
     $("#loginBtn").click(function(){
         // code snippet to get nonce and then sign that and get jwt to be added
-          
-        // });
         $.ajax({
                 url: '/getChallenge',
-                method: 'POST',
-                data: JSON.stringify({
+                method: 'GET',
+                data: {
                     publicAddress: web3.eth.coinbase
-                }),
+                },
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function (data, status) {
@@ -32,7 +30,6 @@ $(document).ready(function(){
                     web3.personal.sign(data.nonce, web3.eth.coinbase, (err, signature) => {
                         if (err) console.log(err);
                         else {
-                            
                             authenticate(signature);
                         }
                           

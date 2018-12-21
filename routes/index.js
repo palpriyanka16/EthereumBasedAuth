@@ -22,13 +22,15 @@ router.post('/signUp', function(req, res, next) {
         User.create(user);
         console.log("User entered into db");
         res.status(200).send(JSON.stringify({msg: "You have been signed up"}));
+    }).catch(function(err) {
+        res.status(500).send(JSON.stringify({msg: err}));
     });
 });
 
-router.post('/getChallenge', function(req, res, next) {
+router.get('/getChallenge', function(req, res, next) {
     loggedIn = false;
-    var pubAddr = req.body.publicAddress;
     console.log(pubAddr);
+    var pubAddr = req.query.publicAddress;
     User.find({where: {pubAddr: pubAddr}}).then(function(user) {
         res.status(200).send(JSON.stringify({nonce: user.nonce}));
     }).catch(function(err) {
