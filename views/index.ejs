@@ -23,7 +23,8 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-offset-1 col-md-4">
+                <h3>SIGN UP</h3>
                 <form id="signUpForm">
                     <div class="form-group">
                         <label>Username</label>
@@ -40,9 +41,20 @@
                     <div id="signUpFormLogMessage"></div>
                 </form>
             </div>
-        </div>
-        <div class="row" style="margin-top: 2%;">
-            <div class="col-md-4">
+            <div class="col-md-offset-2 col-md-4">
+                <h3>LOGIN</h3>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input class="form-control" type="text" name="username" placeholder="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input class="form-control" type="password" name="password" placeholder="password" required><br><br>
+                    </div>
+                    <button class="btn btn-success" type="submit">Login</button>
+                    <div id="loginFormLogMessage"></div>
+                </form>
                 <button class="btn btn-info" id="loginBtn">Login Using Metamask</button>
             </div>
         </div>

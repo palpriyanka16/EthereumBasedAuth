@@ -13,7 +13,7 @@ var loggedIn = false;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  if(loggedIn) res.render('dashboard');
+  if(loggedIn) res.redirect('/displayDashboard');
   res.render('index', { title: 'Ethereum Based Login' });
 });
 
@@ -61,49 +61,69 @@ router.get('/getChallenge', function(req, res, next) {
 
 router.post('/auth', function(req, res, next) {
     loggedIn = false;
-    var pubAddr = req.body.publicAddress;
-    var signature = req.body.signature;
-    User.findOne({where: {pubAddr: pubAddr}}).then(function(user) {
-        var msg = user.nonce;
-        const msgBuffer = ethUtil.toBuffer(msg);
-        const msgHash = ethUtil.hashPersonalMessage(msgBuffer);
-        const signatureBuffer = ethUtil.toBuffer(signature);
-        const signatureParams = ethUtil.fromRpcSig(signatureBuffer);
-        const publicKey = ethUtil.ecrecover(
-          msgHash,
-          signatureParams.v,
-          signatureParams.r,
-          signatureParams.s
-        );
-        const addressBuffer = ethUtil.publicToAddress(publicKey);
-        const address = ethUtil.bufferToHex(addressBuffer);
 
-        // The signature verification is successful if the address found with
-        // ecrecover matches the initial publicAddress
-        if (address.toLowerCase() === pubAddr.toLowerCase()) {
-            console.log("true");
-            var newNonce = randomstring.generate(12);
-            User.update({
-                nonce: newNonce
-            }, {
-                where: { pubAddr: pubAddr}
-            }).then(function(){
-                console.log("Nonce updated");
+    if (req.body.isMetamask) {
+        var pubAddr = req.body.publicAddress;
+        var signature = req.body.signature;
+        User.findOne({where: {pubAddr: pubAddr}}).then(function(user) {
+            var msg = user.nonce;
+            const msgBuffer = ethUtil.toBuffer(msg);
+            const msgHash = ethUtil.hashPersonalMessage(msgBuffer);
+            const signatureBuffer = ethUtil.toBuffer(signature);
+            const signatureParams = ethUtil.fromRpcSig(signatureBuffer);
+            const publicKey = ethUtil.ecrecover(
+              msgHash,
+              signatureParams.v,
+              signatureParams.r,
+              signatureParams.s
+            );
+            const addressBuffer = ethUtil.publicToAddress(publicKey);
+            const address = ethUtil.bufferToHex(addressBuffer);
+
+            // The signature verification is successful if the address found with
+            // ecrecover matches the initial publicAddress
+            if (address.toLowerCase() === pubAddr.toLowerCase()) {
+                console.log("true");
+                var newNonce = randomstring.generate(12);
+                User.update({
+                    nonce: newNonce
+                }, {
+                    where: { pubAddr: pubAddr}
+                }).then(function(){
+                    console.log("Nonce updated");
+                    const payload = {
+                        user: user.pubAddr    
+                    };
+                    var token = jwt.sign(payload, secretString, {
+                        expiresIn: 86400  
+                    });
+                    //console.log(token);
+                    res.status(200).send(JSON.stringify({msg: "Verified as true", token: token}));
+                });
+                
+            } else {
+                console.log("false");
+                res.status(501).send(JSON.stringify({msg: "Invalid signature"}));
+            }
+        });
+    } else {
+        const username = req.body.username;
+        const password = req.body.password;
+
+        User.findOne({where: {username: username}}).then(function(user) {
+            if(passwordHash.verify(password, user.hashedPassword)) {
                 const payload = {
-                    user: user.pubAddr    
+                    user: user.username,
                 };
                 var token = jwt.sign(payload, secretString, {
-                    expiresIn: 86400  
+                    expiresIn: 86400,
                 });
-                //console.log(token);
                 res.status(200).send(JSON.stringify({msg: "Verified as true", token: token}));
-            });
-            
-        } else {
-            console.log("false");
-            res.status(501).send(JSON.stringify({msg: "Invalid signature"}));
-        }
-    });
+            } else {
+                res.status(501).send(JSON.stringify({msg: "Invalid signature"}));
+            }
+        });
+    }
 });
 
 router.get('/restrictedAccess', function(req, res, next) {
@@ -132,6 +152,7 @@ router.get('/displayDashboard', function(req, res, next) {
 
 router.post('/logout', function(req, res, next) {
     loggedIn = false;
-    res.render('index', {title: 'Ethereum Based Login'});
+    res.redirect('/');
+    // res.render('index', {title: 'Ethereum Based Login'});
 });
 module.exports = router;

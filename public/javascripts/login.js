@@ -36,6 +36,17 @@ $(document).ready(function(){
         });
     });
 
+    $('#loginForm').submit(function(event) {
+        event.preventDefault();
+
+        var data = {
+            'username': $("#loginForm").find('input[name="username"]').val(),
+            'password': $("#loginForm").find('input[name="password"]').val(),
+            'isMetamask': false,
+        };
+        authenticate(data);
+    });
+
     $('#signUpFormMetamaskCheckBox').change(function() {
         $('#signUpFormPasswordInput').attr('disabled', this.checked);
     });
@@ -56,7 +67,12 @@ $(document).ready(function(){
                     web3.personal.sign(data.nonce, web3.eth.coinbase, (err, signature) => {
                         if (err) console.log(err);
                         else {
-                            authenticate(signature);
+                            var data = {
+                                'publicAddress': web3.eth.coinbase,
+                                'signature': signature,
+                                'isMetamask': true,
+                            };
+                            authenticate(data);
                         }
                           
                     });
@@ -68,15 +84,12 @@ $(document).ready(function(){
     });
 });
 
-function authenticate(signature) {
+function authenticate(data) {
     // alert(signature);
     $.ajax({
         url: '/auth',
         method: 'POST',
-        data: JSON.stringify({
-            publicAddress: web3.eth.coinbase,
-            signature: signature
-        }),
+        data: JSON.stringify(data),
         contentType: 'application/json',
         dataType: 'json',
         success: function (data, status) {
@@ -84,10 +97,8 @@ function authenticate(signature) {
             localStorage.setItem('token', data.token);
             getDashboard();
         },
-        error: function (status, error) {
-           alert("Invalid signature");
-        }
-
+    }).fail(function($xhr) {
+        $("#loginFormLogMessage").html($xhr.responseText);
     });
 }
 
