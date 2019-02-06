@@ -92,13 +92,14 @@ router.post('/auth', function(req, res, next) {
                 }).then(function(){
                     console.log("Nonce updated");
                     const payload = {
-                        user: user.pubAddr    
+                        user: user.pubAddr,
+                        username: user.username,
                     };
                     var token = jwt.sign(payload, secretString, {
                         expiresIn: 86400  
                     });
                     //console.log(token);
-                    res.status(200).send(JSON.stringify({msg: "Verified as true", token: token}));
+                    res.status(200).send(JSON.stringify({msg: "Verified as true", token: token, username: user.username}));
                 });
                 
             } else {
@@ -114,11 +115,12 @@ router.post('/auth', function(req, res, next) {
             if(passwordHash.verify(password, user.hashedPassword)) {
                 const payload = {
                     user: user.username,
+                    username: user.username,
                 };
                 var token = jwt.sign(payload, secretString, {
                     expiresIn: 86400,
                 });
-                res.status(200).send(JSON.stringify({msg: "Verified as true", token: token}));
+                res.status(200).send(JSON.stringify({msg: "Verified as true", token: token, username: user.username}));
             } else {
                 res.status(501).send(JSON.stringify({msg: "Invalid signature"}));
             }

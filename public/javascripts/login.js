@@ -93,8 +93,9 @@ function authenticate(data) {
         contentType: 'application/json',
         dataType: 'json',
         success: function (data, status) {
-            //alert("Signature verified" + " " + data.token);
             localStorage.setItem('token', data.token);
+            localStorage.setItem('username', data.username);
+            // console.log(data);
             getDashboard();
         },
     }).fail(function($xhr) {
