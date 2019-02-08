@@ -6,20 +6,45 @@
         <title>Logged In</title>
         <link rel='stylesheet' href='/stylesheets/style.css' />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src='/javascripts/dashboard.js'></script>
     </head>
     <body>
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <h1>Dashboard</h1>
+                    <h1>SabKaDriver</h1>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
                     <p>You are logged in</p>
+                    <p>Welcome to SabKaDriver! Your commuting needs are now just a few clicks away!</p>
+                    <p>To find a driver that perfectly matches your needs, enter the required details below.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <form>
+                        Source Latitude: <input type="text" id="source-latitude"><br>
+                        Source Longitude: <input type="text" id="source-longitude"><br>
+                        Destination Latitude: <input type="text" id="destination-latitude"><br>
+                        Destination Longitude: <input type="text" id="destination-longitude"><br>
+                        Special facilities: <br>
+                        <input type="checkbox" name="feature" value="CPR">CPR<br>
+                        <input type="checkbox" name="feature" value="OxygenCylinder">Oxygen Cylinder<br>
+                    </form>
+                    <table id="driverDetails">
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-4">
+                    <form method='get' action='/list'><button class="btn btn-default" type='button' onclick=' return suggestRiders()'>Show list of available riders</button></form>
+                </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <h1> </h1>
                 </div>
             </div>
             <div class="row">
