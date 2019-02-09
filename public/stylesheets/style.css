@@ -1,8 +1,25 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: 'Vollkorn', serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+#driverDetails {
+	border-collapse:separate; 
+    border-spacing:0 15px; 
+}
+
+#bookingDetails {
+	display: none;
+	border-style: solid;
+	border-color: red;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.dashboard {
+	font-family: 'Vollkorn', serif;
 }

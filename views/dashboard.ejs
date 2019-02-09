@@ -5,13 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Logged In</title>
         <link rel='stylesheet' href='/stylesheets/style.css' />
+        <link href="https://fonts.googleapis.com/css?family=Vollkorn" rel="stylesheet"> 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src='/javascripts/dashboard.js'></script>
     </head>
     <body>
-        <div class="container">
+        <div class="container" class=".dashboard">
             <div class="row">
                 <div class="col-md-4">
                     <h1>SabKaDriver</h1>
@@ -24,7 +25,7 @@
             </div>
             <div class="row" style="margin-top: 5%;">
                 <div class="col-md-12">
-                    <p>Welcome to SabKaDriver! Your commuting needs are now just a few clicks away, To find a driver that perfectly</p>
+                    <p>Welcome to SabKaDriver! Your commuting needs are now just a few clicks away, To find a driver that perfectly matches your needs fill the following details and book a ride!</p>
                 </div>
             </div>
             <div class="row" style="margin-top: 2%;">
@@ -48,16 +49,16 @@
                             <label for="destination-longitude">Destination Longitude:</label>
                             <input type="text" class="form-control" id="destination-longitude">
                         </div>
-
                         <div class="form-group">
                             <label for="Special Features">Special Features Needed:</label><br>
                             <input type="checkbox" name="feature" value="CPR"> CPR<br>
                             <input type="checkbox" name="feature" value="OxygenCylinder"> Oxygen Cylinder<br>
+                            <input type="checkbox" name="feature" value="WheelChair"> Wheel Chair<br>
                         </div>
                         <!-- <button type="submit" class="btn btn-default">Submit</button> -->
                     </form>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3" id="bookingDetails">
                 </div>
 
                 <!-- <div>
@@ -70,8 +71,7 @@
                         <input type="checkbox" name="feature" value="CPR">CPR<br>
                         <input type="checkbox" name="feature" value="OxygenCylinder">Oxygen Cylinder<br>
                     </form>
-                    <table id="driverDetails">
-                    </table>
+                    
                 </div> -->
             </div>
             <div class="row">
@@ -81,11 +81,15 @@
                 </div>
                 <div class="col-md-3"></div>
             </div>
-            <!-- <div class="row">
-                <div class="col-md-4">
-                    <h1> </h1>
+
+            <div class="row" style="margin-top: 3%;">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <table class="table table-striped" id="driverDetails">
+                    </table>
                 </div>
-            </div> -->
+                <div class="col-md-3"></div>
+            </div>
             
         </div>
     </body>

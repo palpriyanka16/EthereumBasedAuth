@@ -20,6 +20,9 @@ function bookRide(button, driverName) {
         },
         success: function(result) {
             console.log(result);
+            var bookingResult = 'You have successfully booked a ride and the booking details are :';
+            $("#bookingDetails").css("display", "block");
+            $("#bookingDetails").html(bookingResult);
         },
         error: function(error) {
             console.log(error);
@@ -82,18 +85,71 @@ function suggestRiders() {
             console.log(data);
             var driverListHTML = `
             <tr>
-                <th>Ride Number</th>
+                <th>Driver Id</th>
                 <th>Name</th>
-                <th>Contact</th>
+                <th>Street</th>
+                <th>Specialisations</th>
+                <th>Phone Number</th>
+                <th></th>
             </tr>
             `;
             // var driverListHTML = "";
             console.log(data);
+            var specOne = '';
+            data["driver1"].spec.forEach(function(element) {
+                specOne += element + ' '; 
+            });
+            var specTwo = '';
+            data["driver2"].spec.forEach(function(element) {
+                specTwo += element + ' '; 
+            });
+            var specThree = '';
+            data["driver3"].spec.forEach(function(element) {
+                specThree += element + ' '; 
+            });
+            var specFour = '';
+            data["driver4"].spec.forEach(function(element) {
+                specFour += element + ' '; 
+            });
+
             driverListHTML += `
             <tr>
+                <td>${data["driver1"].id}</td>
                 <td>${data["driver1"].name}</td>
+                <td>${data["driver1"].street}</td>
+                <td>${specOne}</td>
                 <td>${data["driver1"].phone}</td>
-                <td><button onclick="bookRide(this, '${data["driver1"].name}')">
+                <td><button class="btn btn-success" onclick="bookRide(this, '${data["driver1"].name}')">
+                    Book
+                </button></td>
+            </tr>
+            <tr>
+                <td>${data["driver2"].id}</td>
+                <td>${data["driver2"].name}</td>
+                <td>${data["driver2"].street}</td>
+                <td>${specTwo}</td>
+                <td>${data["driver2"].phone}</td>
+                <td><button class="btn btn-success" onclick="bookRide(this, '${data["driver2"].name}')">
+                    Book
+                </button></td>
+            </tr>
+            <tr>
+                <td>${data["driver3"].id}</td>
+                <td>${data["driver3"].name}</td>
+                <td>${data["driver3"].street}</td>
+                <td>${specThree}</td>
+                <td>${data["driver3"].phone}</td>
+                <td><button class="btn btn-success" onclick="bookRide(this, '${data["driver3"].name}')">
+                    Book
+                </button></td>
+            </tr>
+            <tr>
+                <td>${data["driver4"].id}</td>
+                <td>${data["driver4"].name}</td>
+                <td>${data["driver4"].street}</td>
+                <td>${specFour}</td>
+                <td>${data["driver4"].phone}</td>
+                <td><button class="btn btn-success" onclick="bookRide(this, '${data["driver4"].name}')">
                     Book
                 </button></td>
             </tr>
