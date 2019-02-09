@@ -4,23 +4,25 @@ function logMeOut() {
 	return true;
 }
 
-function bookRide(button, driverName) {
-    console.log(driverName);
+function bookRide(button, driverId) {
+    console.log(driverId);
+    //var myurl = 'http://localhost:8000/bookride/?src_lat='+$("#source-latitude").val()+'&src_lon='+$("#source-longitude").val()+'&dest_lat='+$("#destination-latitude").val()+'&dest_lon='+$("#destination-longitude").val()+'&rider='+localStorage.getItem('username')+'&driverid='+driverId;
     $.ajax({
+        // url: myurl,
         url: 'http://localhost:8000/bookride/',
         method: 'POST',
         data: {
-            driver: driverName,
+            driverid: driverId,
             rider: localStorage.getItem('username'),
             source_latitude: $("#source-latitude").val(),
             destination_latitude: $("#destination-latitude").val(),
             source_longitude: $("#source-longitude").val(),
             destination_longitude: $("#destination-longitude").val(),
-            rideno: 1
+            //rideno: 1
         },
         success: function(result) {
             console.log(result);
-            var bookingResult = 'You have successfully booked a ride and the booking details are :';
+            var bookingResult = 'You have successfully booked a ride and the booking id is :'+ result.rideno;
             $("#bookingDetails").css("display", "block");
             $("#bookingDetails").html(bookingResult);
         },
@@ -119,7 +121,7 @@ function suggestRiders() {
                 <td>${data["driver1"].street}</td>
                 <td>${specOne}</td>
                 <td>${data["driver1"].phone}</td>
-                <td><button class="btn btn-success" onclick="bookRide(this, '${data["driver1"].name}')">
+                <td><button class="btn btn-success" onclick="bookRide(this, '${data["driver1"].id}')">
                     Book
                 </button></td>
             </tr>
@@ -129,7 +131,7 @@ function suggestRiders() {
                 <td>${data["driver2"].street}</td>
                 <td>${specTwo}</td>
                 <td>${data["driver2"].phone}</td>
-                <td><button class="btn btn-success" onclick="bookRide(this, '${data["driver2"].name}')">
+                <td><button class="btn btn-success" onclick="bookRide(this, '${data["driver2"].id}')">
                     Book
                 </button></td>
             </tr>
@@ -139,7 +141,7 @@ function suggestRiders() {
                 <td>${data["driver3"].street}</td>
                 <td>${specThree}</td>
                 <td>${data["driver3"].phone}</td>
-                <td><button class="btn btn-success" onclick="bookRide(this, '${data["driver3"].name}')">
+                <td><button class="btn btn-success" onclick="bookRide(this, '${data["driver3"].id}')">
                     Book
                 </button></td>
             </tr>
@@ -149,7 +151,7 @@ function suggestRiders() {
                 <td>${data["driver4"].street}</td>
                 <td>${specFour}</td>
                 <td>${data["driver4"].phone}</td>
-                <td><button class="btn btn-success" onclick="bookRide(this, '${data["driver4"].name}')">
+                <td><button class="btn btn-success" onclick="bookRide(this, '${data["driver4"].id}')">
                     Book
                 </button></td>
             </tr>
